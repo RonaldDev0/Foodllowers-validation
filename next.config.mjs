@@ -7,6 +7,9 @@ const nextConfig = {
     {
       hostname: 'gtsjuxikwdifunrkhpyp.supabase.co'
     }]
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false
   }
 }
 
