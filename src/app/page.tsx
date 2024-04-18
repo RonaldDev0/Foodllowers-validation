@@ -1,19 +1,12 @@
-'use client'
-import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
+import { CodeAuthRedirection } from '@/components'
 
 export default function Home () {
-  const router = useRouter()
-  const loginCode = useSearchParams().get('code')
-
-  useEffect(() => {
-    if (loginCode) {
-      setTimeout(() => router.push('/'), 200)
-    }
-  }, [])
-
   return (
     <main>
+      <Suspense fallback={<p>Loading...</p>}>
+        <CodeAuthRedirection />
+      </Suspense>
       <p>protected route</p>
     </main>
   )

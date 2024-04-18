@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { Providers } from './providers'
 import { NavBarr } from '@/components'
 import type { ReactNode } from 'react'
@@ -17,6 +18,7 @@ export default function RootLayout ({ children }: Readonly<{ children: ReactNode
         <Providers>
           <NavBarr />
           {children}
+          <Analytics />
         </Providers>
       </body>
     </html>
