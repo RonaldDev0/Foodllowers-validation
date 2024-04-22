@@ -3,7 +3,7 @@
 import { NextUIProvider } from '@nextui-org/react'
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useDataUser } from '@/store'
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs'
 
@@ -28,7 +28,8 @@ const Context = createContext<SupabaseContext | undefined>(undefined)
 export function Providers ({ children }: { children: ReactNode }) {
   const [supabase] = useState(() => createPagesBrowserClient())
   const router = useRouter()
-  const { user, setStore } = useDataUser()
+  const path = usePathname()
+  const { user, admin, setStore } = useDataUser()
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => router.refresh())
@@ -61,6 +62,16 @@ export function Providers ({ children }: { children: ReactNode }) {
         setStore('admin', !!data[0])
       })
   }, [user])
+
+  useEffect(() => {
+    if (admin === null) {
+      return
+    }
+
+    if (!admin) {
+      router.push('/error')
+    }
+  }, [admin, path])
 
   return (
     <Context.Provider value={{ supabase }}>
