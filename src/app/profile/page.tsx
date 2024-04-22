@@ -4,15 +4,28 @@ import { useDataUser } from '@/store'
 import { Button, Card, CardBody } from '@nextui-org/react'
 import Image from 'next/image'
 import { LogOut } from 'lucide-react'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Profile () {
   const { supabase } = useSupabase()
-  const { user, setStore } = useDataUser()
+  const { user, admin, setStore } = useDataUser()
+  const router = useRouter()
 
   const logout = () => {
     supabase.auth.signOut()
       .then(() => setStore('user', null))
   }
+
+  useEffect(() => {
+    if (admin === null) {
+      return
+    }
+
+    if (!admin) {
+      router.push('/error')
+    }
+  }, [admin])
 
   if (!user) {
     return null
