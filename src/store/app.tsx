@@ -2,6 +2,11 @@ import { create } from 'zustand'
 
 interface State {
   darkMode: boolean
+  deliveryPending: [
+    {
+      id: string
+    }
+  ] | null
 }
 
 interface Actions {
@@ -10,5 +15,6 @@ interface Actions {
 
 export const useDataApp = create<State & Actions>(set => ({
   darkMode: true,
+  deliveryPending: null,
   setStore: (property, value) => set(prev => ({ ...prev, [property]: value }))
 }))

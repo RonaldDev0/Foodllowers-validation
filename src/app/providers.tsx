@@ -28,7 +28,7 @@ const Context = createContext<SupabaseContext | undefined>(undefined)
 export function Providers ({ children }: { children: ReactNode }) {
   const [supabase] = useState(() => createPagesBrowserClient())
   const router = useRouter()
-  const { user, admin, setStore } = useDataUser()
+  const { user, setStore } = useDataUser()
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => router.refresh())
@@ -44,16 +44,6 @@ export function Providers ({ children }: { children: ReactNode }) {
         }
       })
   }, [])
-
-  useEffect(() => {
-    if (admin === null) {
-      return
-    }
-
-    if (!admin) {
-      router.push('/error')
-    }
-  }, [admin])
 
   useEffect(() => {
     if (!user) {
