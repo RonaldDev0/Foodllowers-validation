@@ -8,7 +8,6 @@ export default function Home () {
   const { supabase } = useSupabase()
   const { deliveryPending, setStore } = useDataApp()
 
-
   useEffect(() => {
     if (deliveryPending) {
       return

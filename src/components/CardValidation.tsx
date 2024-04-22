@@ -19,20 +19,22 @@ export function CardValidation ({ delivery }: { delivery: any }) {
     setImg(publicUrl + '?time=' + Date.now())
   }, [])
 
+  if (!img) {
+    return null
+  }
+
   return (
     <Card className='cursor-pointer'>
       <CardBody
         onClick={() => router.push(`/validation?q=${delivery.id}`)}
         className='p-0'
       >
-        {img && (
-          <Image
-            width={400}
-            height={200}
-            alt='img'
-            src={img}
-          />
-        )}
+        <Image
+          width={400}
+          height={200}
+          alt='img'
+          src={img}
+        />
       </CardBody>
     </Card>
   )

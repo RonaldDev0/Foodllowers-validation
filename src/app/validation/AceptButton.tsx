@@ -1,0 +1,53 @@
+'use client'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from '@nextui-org/react'
+
+export function AceptButton () {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
+  function onSubmit (onClose: Function) {
+    onClose()
+  }
+
+  return (
+    <>
+      <Button
+        color='secondary'
+        className='w-96 font-bold text-lg'
+        onPress={onOpen}
+      >
+        Aceptar
+      </Button>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isDismissable={false}
+      >
+        <ModalContent>
+          {onClose => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                <div className='w-full flex justify-center'>
+                  Aceptar
+                </div>
+              </ModalHeader>
+              <ModalBody>
+                <p>Estas seguro de aceptar a este delivery?</p>
+              </ModalBody>
+              <ModalFooter>
+                <div className='flex flex-col w-full'>
+                  <Button
+                    color='secondary'
+                    className='font-semibold'
+                    onPress={() => onSubmit(onClose)}
+                  >
+                    Aceptar
+                  </Button>
+                </div>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
