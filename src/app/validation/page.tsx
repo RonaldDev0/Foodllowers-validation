@@ -14,7 +14,6 @@ export default function Validation () {
       <Suspense fallback={<p>Loading...</p>}>
         <DeliveryFetch
           setDelivery={setDelivery}
-          delivery={delivery}
         />
       </Suspense>
       {delivery && (
@@ -47,8 +46,8 @@ export default function Validation () {
             />
           </div>
           <div className='flex w-full justify-around'>
-            <DeclineButton />
-            <AceptButton />
+            <DeclineButton delivery={delivery} />
+            <AceptButton delivery={delivery} />
           </div>
         </main>
       )}

@@ -1,9 +1,24 @@
 'use client'
 import { useState } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from '@nextui-org/react'
+import { useSupabase } from '../providers'
+import { useRouter } from 'next/navigation'
+import { useDataApp } from '@/store'
 
-export function DeclineButton () {
+interface IProps {
+  delivery: {
+    id: string
+    name: string
+    email: string
+  }
+}
+
+export function DeclineButton ({ delivery }: IProps) {
+  const { supabase } = useSupabase()
+  const router = useRouter()
+  const { setStore } = useDataApp()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
   const [input, setInput] = useState('')
   const [error, setError] = useState<null | string>(null)
 
@@ -12,12 +27,47 @@ export function DeclineButton () {
     setInput(value)
   }
 
-  function onSubmit (onClose: Function) {
+  const onSubmit = () => {
     if (input.length < 5) {
       setError('completa este campo')
       return
     }
-    onClose()
+
+    supabase
+      .from('deliverys')
+      .update({ register_step: 'data_collection' })
+      .eq('id', delivery.id)
+      .select('id')
+      .then(({ error }) => {
+        if (error) {
+          return
+        }
+
+        fetch('/api/send_email', {
+          cache: 'no-store',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre: delivery.name,
+            userEmail: delivery.email,
+            accept: false,
+            motivo: input
+          })
+        })
+
+        supabase
+          .from('deliverys')
+          .select('id, identification_card_front')
+          .eq('register_complete', false)
+          .eq('register_step', 'data_validation')
+          .then(({ error, data }) => {
+            if (error) {
+              return
+            }
+            setStore('deliveryPending', data)
+            router.push('/')
+          })
+      })
   }
 
   return (
@@ -36,7 +86,7 @@ export function DeclineButton () {
         isDismissable={false}
       >
         <ModalContent>
-          {onClose => (
+          {() => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 <div className='w-full flex justify-center'>
@@ -59,7 +109,7 @@ export function DeclineButton () {
                     color='danger'
                     variant='flat'
                     className='font-semibold'
-                    onPress={() => onSubmit(onClose)}
+                    onPress={onSubmit}
                   >
                     Rechazar
                   </Button>
