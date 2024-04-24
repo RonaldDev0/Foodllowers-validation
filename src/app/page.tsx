@@ -15,7 +15,7 @@ export default function Home () {
 
     supabase
       .from('deliverys')
-      .select('id, identification_card_front')
+      .select('id, identification_card_front, name, email')
       .eq('register_complete', false)
       .eq('register_step', 'data_validation')
       .then(({ error, data }) => {
@@ -31,7 +31,7 @@ export default function Home () {
       <Suspense fallback={<p>Loading...</p>}>
         <CodeAuthRedirection />
       </Suspense>
-      <main>
+      <main className='flex flex-col gap-6'>
         {deliveryPending?.map(delivery => (
           <CardValidation
             key={delivery.id}

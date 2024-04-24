@@ -2,7 +2,7 @@
 import { useSupabase } from '@/app/providers'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody } from '@nextui-org/react'
+import { Card, CardHeader, CardBody } from '@nextui-org/react'
 import Image from 'next/image'
 
 export function CardValidation ({ delivery }: { delivery: any }) {
@@ -25,6 +25,12 @@ export function CardValidation ({ delivery }: { delivery: any }) {
 
   return (
     <Card className='cursor-pointer'>
+      <CardHeader>
+        <div>
+          <p>{delivery.name}</p>
+          <p>{delivery.email}</p>
+        </div>
+      </CardHeader>
       <CardBody
         onClick={() => router.push(`/validation?q=${delivery.id}`)}
         className='p-0'
