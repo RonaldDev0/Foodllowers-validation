@@ -16,7 +16,8 @@ export function CardValidation ({ delivery }: { delivery: any }) {
       .from('deliverys')
       .getPublicUrl(delivery.identification_card_front)
 
-    setImg(publicUrl + '?time=' + Date.now())
+    // setImg(publicUrl + '?time=' + Date.now())
+    setImg(publicUrl)
   }, [])
 
   if (!img) {

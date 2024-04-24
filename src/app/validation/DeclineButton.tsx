@@ -57,7 +57,7 @@ export function DeclineButton ({ delivery }: IProps) {
 
         supabase
           .from('deliverys')
-          .select('id, identification_card_front')
+          .select('id, identification_card_front, name, email')
           .eq('register_complete', false)
           .eq('register_step', 'data_validation')
           .then(({ error, data }) => {
