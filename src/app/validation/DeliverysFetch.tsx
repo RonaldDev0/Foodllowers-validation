@@ -17,12 +17,10 @@ export function DeliveryFetch ({ setDelivery }: any) {
 
     supabase
       .from('deliverys')
-      .select('id, identification_card, identification_card_front, identification_card_back, license, property_card, bank_account, name, email')
+      .select('id, identification_card, identification_card_front, identification_card_back, license, property_card, bank_account, name, email, user_picture, license_plate_photo, bag_picture')
       .eq('id', query)
       .then(({ error, data }) => {
-        if (error) {
-          return
-        }
+        if (error) return
         setDelivery(data[0])
       })
   }, [admin, path])

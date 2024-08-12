@@ -19,6 +19,10 @@ export default function Validation () {
       {delivery && (
         <main className='h-full flex flex-col gap-24 justify-center items-center'>
           <div className='grid grid-cols-3 gap-4'>
+            <ImgSection
+              title='Foto del rostro'
+              img={delivery.user_picture}
+            />
             <TextSection
               title='Número de cedula de documento'
               p={delivery.identification_card}
@@ -36,8 +40,16 @@ export default function Validation () {
               img={delivery.license}
             />
             <ImgSection
+              title='Foto de la placa del vehículo'
+              img={delivery.license_plate_photo}
+            />
+            <ImgSection
               title='Targeta de propiedad'
               img={delivery.property_card}
+            />
+            <ImgSection
+              title='Foto del bolso del delivery'
+              img={delivery.bag_picture}
             />
             <TextSection
               title='Cuenta bancaria'
