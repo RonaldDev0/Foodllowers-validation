@@ -1,12 +1,12 @@
 'use client'
 import { useState, Suspense } from 'react'
-import { DeliveryFetch } from './DeliverysFetch'
-import { ImgSection } from './ImgSection'
-import { TextSection } from './TextSection'
+import { DeliveryFetch } from './DeliveryFetch'
+import { ImgSection } from '../ImgSection'
+import { TextSection } from '../TextSection'
 import { DeclineButton } from './DeclineButton'
 import { AceptButton } from './AceptButton'
 
-export default function Validation () {
+export default function Delivery () {
   const [delivery, setDelivery] = useState<any>(null)
 
   return (
@@ -22,6 +22,7 @@ export default function Validation () {
             <ImgSection
               title='Foto del rostro'
               img={delivery.user_picture}
+              bucket='deliverys'
             />
             <TextSection
               title='Número de cedula de documento'
@@ -30,26 +31,32 @@ export default function Validation () {
             <ImgSection
               title='Cedula: frente'
               img={delivery.identification_card_front}
+              bucket='deliverys'
             />
             <ImgSection
               title='Cedula: atras'
               img={delivery.identification_card_back}
+              bucket='deliverys'
             />
             <ImgSection
               title='Licencia de conducir'
               img={delivery.license}
+              bucket='deliverys'
             />
             <ImgSection
               title='Foto de la placa del vehículo'
               img={delivery.license_plate_photo}
+              bucket='deliverys'
             />
             <ImgSection
               title='Targeta de propiedad'
               img={delivery.property_card}
+              bucket='deliverys'
             />
             <ImgSection
               title='Foto del bolso del delivery'
               img={delivery.bag_picture}
+              bucket='deliverys'
             />
             <TextSection
               title='Cuenta bancaria'

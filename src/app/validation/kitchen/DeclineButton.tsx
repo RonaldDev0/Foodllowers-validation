@@ -1,54 +1,65 @@
 'use client'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from '@nextui-org/react'
-import { useSupabase } from '../providers'
+import { useState } from 'react'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from '@nextui-org/react'
+import { useSupabase } from '@/app/providers'
 import { useRouter } from 'next/navigation'
 import { useDataApp } from '@/store'
 
 interface IProps {
-  delivery: {
+  kitchen: {
     id: string
     name: string
     email: string
   }
 }
 
-export function AceptButton ({ delivery }: IProps) {
+export function DeclineButton ({ kitchen }: IProps) {
   const { supabase } = useSupabase()
   const router = useRouter()
   const { setStore } = useDataApp()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+  const [input, setInput] = useState('')
+  const [error, setError] = useState<null | string>(null)
+
+  const handleChange = ({ target: { value } }: any) => {
+    setError(null)
+    setInput(value)
+  }
+
   const onSubmit = () => {
+    if (input.length < 5) {
+      setError('completa este campo')
+      return
+    }
+
     supabase
-      .from('deliverys')
-      .update({ register_step: 'finished', register_complete: true })
-      .eq('id', delivery.id)
+      .from('kitchens')
+      .update({ register_step: 'data_collection' })
+      .eq('id', kitchen.id)
       .select('id')
       .then(({ error }) => {
-        if (error) {
-          return
-        }
+        if (error) return
 
         fetch('/api/send_email', {
           cache: 'no-store',
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nombre: delivery.name,
-            userEmail: delivery.email,
-            accept: true
+            userEmail: kitchen.email,
+            accept: false,
+            motivo: input,
+            rol: 'kitchen'
           })
         })
 
         supabase
-          .from('deliverys')
-          .select('id, identification_card_front, name, email')
+          .from('kitchens')
+          .select('id, phone_number, chamber_of_commerce, health, bank_account, email')
           .eq('register_complete', false)
           .eq('register_step', 'data_validation')
           .then(({ error, data }) => {
-            if (error) {
-              return
-            }
+            if (error) return
             setStore('deliveryPending', data)
             router.push('/')
           })
@@ -58,11 +69,12 @@ export function AceptButton ({ delivery }: IProps) {
   return (
     <>
       <Button
-        color='secondary'
+        color='danger'
+        variant='flat'
         className='w-96 font-bold text-lg'
         onPress={onOpen}
       >
-        Aceptar
+        Rechazar
       </Button>
       <Modal
         isOpen={isOpen}
@@ -74,20 +86,28 @@ export function AceptButton ({ delivery }: IProps) {
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 <div className='w-full flex justify-center'>
-                  Aceptar
+                  Rechazar
                 </div>
               </ModalHeader>
               <ModalBody>
-                <p>Estas seguro de aceptar a este delivery?</p>
+                <p>Estas seguro de rechazar a este delivery?</p>
+                <Input
+                  label='Por que?'
+                  value={input}
+                  isInvalid={!!error}
+                  errorMessage={error}
+                  onChange={handleChange}
+                />
               </ModalBody>
               <ModalFooter>
                 <div className='flex flex-col w-full'>
                   <Button
-                    color='secondary'
+                    color='danger'
+                    variant='flat'
                     className='font-semibold'
                     onPress={onSubmit}
                   >
-                    Aceptar
+                    Rechazar
                   </Button>
                 </div>
               </ModalFooter>

@@ -1,18 +1,18 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useSupabase } from '../providers'
+import { useSupabase } from '@/app/providers'
 import { Card, CardHeader, CardBody } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export function ImgSection ({ img, title }: { img: string, title: string }) {
+export function ImgSection ({ img, title, bucket }: { img: string, title: string, bucket: string }) {
   const { supabase } = useSupabase()
   const [src, setSrc] = useState<null | string>(null)
 
   useEffect(() => {
     const { data: { publicUrl } } = supabase
       .storage
-      .from('deliverys')
+      .from(bucket)
       .getPublicUrl(img)
     setSrc(publicUrl)
   }, [])

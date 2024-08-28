@@ -1,7 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from '@nextui-org/react'
-import { useSupabase } from '../providers'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from '@nextui-org/react'
+import { useSupabase } from '@/app/providers'
 import { useRouter } from 'next/navigation'
 import { useDataApp } from '@/store'
 
@@ -13,29 +12,16 @@ interface IProps {
   }
 }
 
-export function DeclineButton ({ delivery }: IProps) {
+export function AceptButton ({ delivery }: IProps) {
   const { supabase } = useSupabase()
   const router = useRouter()
   const { setStore } = useDataApp()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const [input, setInput] = useState('')
-  const [error, setError] = useState<null | string>(null)
-
-  const handleChange = ({ target: { value } }: any) => {
-    setError(null)
-    setInput(value)
-  }
-
   const onSubmit = () => {
-    if (input.length < 5) {
-      setError('completa este campo')
-      return
-    }
-
     supabase
       .from('deliverys')
-      .update({ register_step: 'data_collection' })
+      .update({ register_step: 'finished', register_complete: true })
       .eq('id', delivery.id)
       .select('id')
       .then(({ error }) => {
@@ -50,8 +36,8 @@ export function DeclineButton ({ delivery }: IProps) {
           body: JSON.stringify({
             nombre: delivery.name,
             userEmail: delivery.email,
-            accept: false,
-            motivo: input
+            accept: true,
+            rol: 'delivery'
           })
         })
 
@@ -73,12 +59,11 @@ export function DeclineButton ({ delivery }: IProps) {
   return (
     <>
       <Button
-        color='danger'
-        variant='flat'
+        color='secondary'
         className='w-96 font-bold text-lg'
         onPress={onOpen}
       >
-        Rechazar
+        Aceptar
       </Button>
       <Modal
         isOpen={isOpen}
@@ -90,28 +75,20 @@ export function DeclineButton ({ delivery }: IProps) {
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 <div className='w-full flex justify-center'>
-                  Rechazar
+                  Aceptar
                 </div>
               </ModalHeader>
               <ModalBody>
-                <p>Estas seguro de rechazar a este delivery?</p>
-                <Input
-                  label='Por que?'
-                  value={input}
-                  isInvalid={!!error}
-                  errorMessage={error}
-                  onChange={handleChange}
-                />
+                <p>Estas seguro de aceptar a este delivery?</p>
               </ModalBody>
               <ModalFooter>
                 <div className='flex flex-col w-full'>
                   <Button
-                    color='danger'
-                    variant='flat'
+                    color='secondary'
                     className='font-semibold'
                     onPress={onSubmit}
                   >
-                    Rechazar
+                    Aceptar
                   </Button>
                 </div>
               </ModalFooter>

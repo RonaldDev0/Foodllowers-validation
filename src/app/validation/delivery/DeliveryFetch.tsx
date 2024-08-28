@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from 'react'
-import { useSupabase } from '../providers'
+import { useSupabase } from '@/app/providers'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { useDataUser } from '@/store'
 

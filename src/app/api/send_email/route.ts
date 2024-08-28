@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST (req: Request) {
-  const { nombre, userEmail, accept, motivo } = await req.json()
+  const { nombre, userEmail, accept, motivo, rol } = await req.json()
 
   try {
     if (accept) {
@@ -12,7 +12,7 @@ export async function POST (req: Request) {
         from: 'Foodllowers-Deliverys <onboarding@resend.dev>',
         to: [userEmail],
         subject: 'Resultado de la validación de registro para Delivery',
-        react: Accept({ nombre }),
+        react: Accept({ nombre, rol }),
         text: ''
       })
 
@@ -23,7 +23,7 @@ export async function POST (req: Request) {
       from: 'Foodllowers-Deliverys <onboarding@resend.dev>',
       to: [userEmail],
       subject: 'Resultado de la validación de registro para Delivery',
-      react: Decline({ nombre, motivo }),
+      react: Decline({ nombre, motivo, rol }),
       text: ''
     })
 
