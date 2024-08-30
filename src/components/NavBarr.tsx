@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useDataUser } from '@/store'
 import { Avatar, Card, CardHeader } from '@nextui-org/react'
-import { Home, Settings } from 'lucide-react'
+import { Home, Settings, CircleDollarSign } from 'lucide-react'
 
 export function NavBarr () {
   const { user } = useDataUser()
@@ -17,6 +17,9 @@ export function NavBarr () {
         <CardHeader className='flex justify-around'>
           <Link href='/'>
             <Home size={28} />
+          </Link>
+          <Link href='/payments'>
+            <CircleDollarSign size={28} />
           </Link>
           <Link href='/settings'>
             <Settings size={28} />
