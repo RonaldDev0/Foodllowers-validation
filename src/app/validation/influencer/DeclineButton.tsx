@@ -6,14 +6,14 @@ import { useRouter } from 'next/navigation'
 import { useDataApp } from '@/store'
 
 interface IProps {
-  kitchen: {
+  influencer: {
     id: string
-    name: string
+    full_name: string
     email: string
   }
 }
 
-export function DeclineButton ({ kitchen }: IProps) {
+export function DeclineButton ({ influencer }: IProps) {
   const { supabase } = useSupabase()
   const router = useRouter()
   const { setStore } = useDataApp()
@@ -34,32 +34,36 @@ export function DeclineButton ({ kitchen }: IProps) {
     }
 
     supabase
-      .from('kitchens')
+      .from('influencers')
       .update({ register_step: 'data_collection' })
-      .eq('id', kitchen.id)
+      .eq('id', influencer.id)
       .select('id')
       .then(({ error }) => {
-        if (error) return
+        if (error) {
+          return
+        }
 
         fetch('/api/send_email', {
           cache: 'no-store',
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userEmail: kitchen.email,
+            nombre: influencer.full_name,
+            userEmail: influencer.email,
             accept: false,
             motivo: input,
-            rol: 'kitchen'
+            rol: 'delivery'
           })
         })
 
         supabase
-          .from('kitchens')
-          .select('id, phone_number, chamber_of_commerce, health, bank_account, email')
+          .from('influencers')
+          .select('id, bank_account, full_name, email, social_networks')
           .eq('register_complete', false)
           .eq('register_step', 'data_validation')
           .then(({ error, data }) => {
             if (error) return
+
             setStore('deliveryPending', data)
             router.push('/')
           })
@@ -90,7 +94,7 @@ export function DeclineButton ({ kitchen }: IProps) {
                 </div>
               </ModalHeader>
               <ModalBody>
-                <p>Estas seguro de rechazar a esta cocina?</p>
+                <p>Estas seguro de rechazar a este influencer?</p>
                 <Input
                   label='Por que?'
                   value={input}

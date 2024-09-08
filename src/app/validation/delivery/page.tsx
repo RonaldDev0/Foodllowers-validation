@@ -60,8 +60,8 @@ export default function Delivery () {
             />
             <TextSection
               title='Cuenta bancaria'
-              p={delivery.bank_account.bank}
-              p2={delivery.bank_account.bankNumber}
+              p=''
+              object={delivery.bank_account}
             />
           </div>
           <div className='flex w-full justify-around'>

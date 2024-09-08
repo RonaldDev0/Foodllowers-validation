@@ -35,8 +35,8 @@ export default function Kitchen () {
             />
             <TextSection
               title='Cuenta bancaria'
-              p={kitchen.bank_account.bank}
-              p2={kitchen.bank_account.bankNumber}
+              p=''
+              object={kitchen.bank_account}
             />
             <TextSection
               title='Email'

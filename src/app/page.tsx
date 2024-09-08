@@ -1,14 +1,14 @@
 'use client'
 import { Suspense, useEffect } from 'react'
 import { CodeAuthRedirection } from '@/components'
-import { DeliveryCardValidation, KitchenCardValidation } from '@/components/CardValidation'
+import { DeliveryCardValidation, KitchenCardValidation, InfluencerCardValidation } from '@/components/CardValidation'
 import { useDataApp } from '@/store'
 import { useSupabase } from '@/app/providers'
 import { Tabs, Tab } from '@nextui-org/react'
 
 export default function Home () {
   const { supabase } = useSupabase()
-  const { deliveryPending, kitchenPending, setStore } = useDataApp()
+  const { deliveryPending, kitchenPending, influencerPending, setStore } = useDataApp()
 
   useEffect(() => {
     if (!deliveryPending) {
@@ -35,17 +35,16 @@ export default function Home () {
         })
     }
 
-    // if (!influencerPending) {
-    //   supabase
-    //     .from('influencers')
-    //     .select('id, name, email')
-    //     .eq('register_complete', false)
-    //     .eq('register_step', 'data_validation')
-    //     .then(({ error, data }) => {
-    //       if (error) return
-    //       setStore('influencerPending', data)
-    //     })
-    // }
+    if (!influencerPending) {
+      supabase
+        .from('influencers')
+        .select('id, full_name, email')
+        .eq('register_step', 'data_validation')
+        .then(({ error, data }) => {
+          if (error) return
+          setStore('influencerPending', data)
+        })
+    }
   }, [])
 
   return (
@@ -72,7 +71,12 @@ export default function Home () {
             ))}
           </Tab>
           <Tab key='influencers' title='Influencers'>
-            <p>Influencers</p>
+            {influencerPending?.map(influencer => (
+              <InfluencerCardValidation
+                key={influencer.id}
+                influencer={influencer}
+              />
+            ))}
           </Tab>
         </Tabs>
       </main>

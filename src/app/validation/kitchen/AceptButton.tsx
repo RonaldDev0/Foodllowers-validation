@@ -75,7 +75,7 @@ export function AceptButton ({ kitchen }: IProps) {
                 </div>
               </ModalHeader>
               <ModalBody>
-                <p>Estas seguro de aceptar a este delivery?</p>
+                <p>Estas seguro de aceptar a esta cocina?</p>
               </ModalBody>
               <ModalFooter>
                 <div className='flex flex-col w-full'>

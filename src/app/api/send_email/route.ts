@@ -11,7 +11,7 @@ export async function POST (req: Request) {
       const data = await resend.emails.send({
         from: 'Foodllowers <onboarding@resend.dev>',
         to: [userEmail],
-        subject: 'Resultado de la validación de registro para Delivery',
+        subject: 'Resultado de la validación de registro con Foodllowers',
         react: Accept({ nombre, rol }),
         text: ''
       })
@@ -22,7 +22,7 @@ export async function POST (req: Request) {
     const data = await resend.emails.send({
       from: 'Foodllowers <onboarding@resend.dev>',
       to: [userEmail],
-      subject: 'Resultado de la validación de registro para Delivery',
+      subject: 'Resultado de la validación de registro con Foodllowers',
       react: Decline({ nombre, motivo, rol }),
       text: ''
     })
